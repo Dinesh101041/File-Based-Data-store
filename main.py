@@ -1,96 +1,87 @@
-# threding allows to perform a multiple task and functions 
-import threading
-# from threading import*
+# threading aloows to perfrom multiple task
+import threading 
+from threading import*
 
 import time
 
-# to store the key value and pair the data structure in python called dictionary is created
-dict={}
+#dictionary is data structure of python which store as key and value
+dictionary={} 
+
+# create function is to create a data
 
 def create(key,value,timeout=0):
-    # check the existig key
-    if key in dict:
-        print("keys is already exists")
+    if key in dictionary:
+        print("The key is already exists create new value") 
     else:
-        # checking dictionary length and key valuse is upto to memory limit is 1gb and 16 kb 
-        if len(dict)<(1024*1020*1024) and value<=(16*1024*1024):
-            # time to live property
-            if timeout==0:
-                d=[value,timeout]
+        # isalpha()is to check whether the key is only alphabets
+        if(key.isalpha()):
+            #constraints for file size less than 1GB and Jasonobject value less than 16KB 
+            if len(dictionary)<(1024*1020*1024) and value<=(16*1024*1024): 
+                if timeout==0:
+                    l=[value,timeout]
+                else:
+                    l=[value,time.time()+timeout]
+                if len(key)<=32: #constraints for input key_name capped at 32chars
+                    dictionary[key]=l
             else:
-                d=[value,time.time()+timeout]
-            if len(key)<=32:
-                dict[key]=1
+                print("memorylimit exceeed ")#error message2
         else:
-            print('Memory limit exceed should be less than 1 gb')
+            print("error: Invalind key_name!! key_name must contain only alphabets and no special characters or numbers")#error message3
 
-
-
-# read operation
-
+#reading the values
+            
 def read(key):
-    # check the key in database
-    if key not in dict:
-        print("key is not present in database enter a valid key")
+    if key not in dictionary:
+        print("error: given key does not exist in database. Please enter a valid key") #error message4
     else:
-        # declaring the key value toa variable
-        a=dict[key]
-        # reading the time of the key 
-        if a[1]!=0:
-            if time.time()<a[1]:
-                # get the value in json format
-                string=str(key)+":"+str(a[0])
-                return string
+        b=dictionary[key]
+        if b[1]!=0:
+            if time.time()<b[1]: #comparing the present time with expiry time
+                stri=str(key)+":"+str(b[0]) #to return the value in the format of JasonObject i.e.,"key_name:value"
+                return stri
             else:
-                print("time is expired")
+                print("error: time-to-live of",key,"has expired") #error message5
         else:
-            string=str(key)+":"+str(a[0])
-            return string
+            stri=str(key)+":"+str(b[0])
+            return stri
 
-
-# delete operation in database
+#deleting the values
 
 def delete(key):
-    # check the key in database
-    if key not in dict:
-        print("key is not present in database enter a valid key")
+    if key not in dictionary:
+        print("error: given key does not exist in database. Please enter a valid key") #error message4
     else:
-        a=dict[key]
-        if a[1]!=0:
-            if time.time()<a[1]:
-                del dict[key]
-                print('key is deleted')
+        b=dictionary[key]
+        if b[1]!=0:
+            if time.time()<b[1]: #comparing the current time with expiry time
+                del dictionary[key]
+                print("key is successfully deleted")
             else:
-                print('key is expired')
+                print("error: time-to-live of",key,"has expired") #error message5
         else:
-            del dict[key]
-            print("key is deleted")            
+            del dictionary[key]
+            print("key is successfully deleted")
 
-        
-# modifiing the database
-def modifiydb(key,value):
-    a=dict[key]
-    if a[1]!=0:
-        if time.time()<a[1]:
-            if key not in dict:
-                print('mentioned key is not in the databse enter valid key')
+
+# modifiying the databse
+def modify(key,value):
+    b=dictionary[key]
+    if b[1]!=0:
+        if time.time()<b[1]:
+            if key not in dictionary:
+                print("error: given key does not exist in database. Please enter a valid key") #error message6
             else:
-                d=[]
-                d.append(value)
-                d.append(a[1])
-                dict[key]=1
+                l=[]
+                l.append(value)
+                l.append(b[1])
+                dictionary[key]=l
         else:
-            print("the time of key is expired")
+            print("error: time-to-live of",key,"has expired") #error message5
     else:
         if key not in d:
-            print('mentioned key is not in the databse enter valid key')
+            print("error: given key does not exist in database. Please enter a valid key") #error message6
         else:
-           d=[]
-           d.append(value)
-           d.append(a[1])
-           dict[key]=1 
-
-             
-
-
-            
+            l=[]
+            l.append(value)
+            l.append(b[1])
+            dictionary[key]=l
