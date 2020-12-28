@@ -33,9 +33,10 @@ def read(key):
     if key not in dict:
         print("key is not present in database enter a valid key")
     else:
+        # declaring the key value toa variable
         a=dict[key]
         # reading the time of the key 
-        if a[1]!==0:
+        if a[1]!=0:
             if time.time()<a[1]:
                 # get the value in json format
                 string=str(key)+":"+str(a[0])
@@ -55,11 +56,39 @@ def delete(key):
         print("key is not present in database enter a valid key")
     else:
         a=dict[key]
-        if a[1]!==0:
+        if a[1]!=0:
             if time.time()<a[1]:
                 del dict[key]
-                
+                print('key is deleted')
+            else:
+                print('key is expired')
+        else:
+            del dict[key]
+            print("key is deleted")            
+
         
+# modifiing the database
+def modifiydb(key,value):
+    a=dict[key]
+    if a[1]!=0:
+        if time.time()<a[1]:
+            if key not in dict:
+                print('mentioned key is not in the databse enter valid key')
+            else:
+                d=[]
+                d.append(value)
+                d.append(a[1])
+                dict[key]=1
+        else:
+            print("the time of key is expired")
+    else:
+        if key not in d:
+            print('mentioned key is not in the databse enter valid key')
+        else:
+           d=[]
+           d.append(value)
+           d.append(a[1])
+           dict[key]=1 
 
              
 
